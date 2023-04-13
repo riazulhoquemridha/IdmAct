@@ -15,17 +15,15 @@ $isAdmin = [bool]([Security.Principal.WindowsIdentity]::GetCurrent().Groups -mat
 $FilePath = "$env:SystemRoot\Temp\IdmAct_$rand.cmd"
 Set-Content -Path $FilePath -Value $response
 
-# Add custom name in IDM license info, prefer to write it in English and/or numeric in below line after = sign,
+# Set a custom name for IDM license info
 $getName = Read-Host -Prompt "Set a name for the license"
 if ([string]::IsNullOrWhiteSpace($getName)) {
     $getName = $env:USERNAME
 }
 
-$sourcePath = $FilePath
-$insertLine = 6
 $insertCode = "set name=$getName"
-$content = Get-Content $sourcePath
-$content[$insertLine] += "`r`n" + $insertCode
+$content = Get-Content $FilePath
+$content[6] += "`r`n" + $insertCode
 
 $content | Out-File $FilePath -Encoding ASCII
 
